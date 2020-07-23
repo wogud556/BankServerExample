@@ -28,7 +28,7 @@ public class BnkSvrController {
 		testbook.setBnk_book_deposit_price(2000);
 		testbook.setBnk_book_withdraw_price(5000);
 		testbook.setBnk_total_price(3000);
-		testbook.setBnk_book_tra_date(todayDate.format(date).toString() + realtime.format(date).toString());
+		testbook.setBnk_book_tra_date(todayDate.format(date).toString() + " " + realtime.format(date).toString());
 		
 		return testbook;
 	}
