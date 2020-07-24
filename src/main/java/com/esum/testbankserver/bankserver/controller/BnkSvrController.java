@@ -1,36 +1,67 @@
 package com.esum.testbankserver.bankserver.controller;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.esum.testbankserver.bankserver.vo.BankBook;
+import com.esum.testbankserver.bankserver.dao.BankBookMapper;
+import com.esum.testbankserver.bankserver.dto.BankBook;
+import com.esum.testbankserver.bankserver.dto.BankUser;
 
 @RestController
 public class BnkSvrController {
 
-	
+	@Autowired
+	private BankBookMapper mapper;
 	
 	@GetMapping(path="/login")
-	public BankBook LoginController() {
-		Date date = new Date();
-		SimpleDateFormat todayDate = new SimpleDateFormat("yyyy-MM-dd");
-		SimpleDateFormat realtime = new SimpleDateFormat("HH:mm:ss");
+	public String LoginController(HttpServletRequest request, HttpServletResponse response) {
 		
+		return "로그인 페이지입니다 아직 아무것도 없음";
+	}
+	@GetMapping(path="/findBook")
+	public BankBook findBankbookController(HttpServletRequest request, HttpServletResponse response) {
+		BankBook bnkbook = new BankBook();
+		String DBHandler = request.getHeader("DBHandler");
 		
+		if("Select".equals(DBHandler)) {
+			bnkbook = mapper.selectOneBankBook("101-11-232-12314");
 		
+		}
 		
-		BankBook testbook = new BankBook();
-		testbook.setBnk_book_account_num("11-1111-1111");
-		testbook.setBnk_user_uid("112b23v-sd");
-		testbook.setBnk_book_deposit_price(2000);
-		testbook.setBnk_book_withdraw_price(5000);
-		testbook.setBnk_total_price(3000);
-		testbook.setBnk_book_tra_date(todayDate.format(date).toString() + " " + realtime.format(date).toString());
+		return bnkbook;
+	}
+	@GetMapping(path="/findAllBook")
+	public List<BankBook> findAllBankbookController(HttpServletRequest request, HttpServletResponse response) {
+		List<BankBook> list = mapper.selectAllBankBook();
+		String DBHandler = request.getHeader("DBHandler");
 		
-		return testbook;
+		return list;
+	}
+	
+	@GetMapping(path="/findUser")
+	public BankUser findUserController(HttpServletRequest request, HttpServletResponse response) {
+		
+		BankUser bnkuser = new BankUser();
+		String DBHandler = request.getHeader("DBHandler");
+		String bnk_user_uid = request.getHeader("UID");
+		
+		bnkuser = mapper.selectOneUser(bnk_user_uid);
+		
+		return bnkuser;
+	}
+	
+	@GetMapping(path="/findAllUser")
+	public List<BankUser> findAllBankUserController(HttpServletRequest request, HttpServletResponse response) {
+		List<BankUser> list = mapper.selectAllUser();
+		String DBHandler = request.getHeader("DBHandler");
+		
+		return list;
 	}
 
 }

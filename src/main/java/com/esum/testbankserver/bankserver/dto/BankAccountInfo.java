@@ -1,4 +1,4 @@
-package com.esum.testbankserver.bankserver.vo;
+package com.esum.testbankserver.bankserver.dto;
 
 import lombok.Data;
 
