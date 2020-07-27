@@ -11,11 +11,11 @@ import com.esum.testbankserver.bankserver.dto.BankUser;
  * 대충 이런식으로 하라고 작성한 것
  * */
 @Mapper
-public interface BankBookMapper {
+public interface BankMapper {
 	public BankBook selectOneBankBook(String book_account_num);
 	public List<BankBook> selectAllBankBook ();
 	
-	public BankUser selectOneUser(String bnk_user_uid);
+	public BankUser selectOneUser(String bnk_user_id);
 	public List<BankUser> selectAllUser ();
 	
 }

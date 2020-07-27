@@ -3,7 +3,7 @@
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
     
-<mapper namespace="com.esum.testbankserver.bankserver.dao.BankBookMapper">
+<mapper namespace="com.esum.testbankserver.bankserver.dao.BankMapper">
 	<select id="selectOneBankBook" parameterType="string" resultType="BankBook">
 		SELECT * FROM BNK_BOOK_INFO WHERE BNK_BOOK_ACCOUNT_NUM = #{book_account_num}
 	</select>
@@ -13,7 +13,7 @@
 	</select>
 	
 	<select id="selectOneUser" parameterType="string" resultType="BankUser">
-		SELECT * FROM BNK_BOOK_INFO WHERE BNK_USER_UID = #{bnk_user_uid}
+		SELECT BNK_USER_ID, BNK_USER_PWD FROM BNK_USER WHERE BNK_USER_ID = #{bnk_user_id}
 	</select>
 	
 	<select id="selectAllUser" resultType="BankUser">

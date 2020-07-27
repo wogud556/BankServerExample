@@ -9,20 +9,59 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.esum.testbankserver.bankserver.dao.BankBookMapper;
+import com.esum.testbankserver.bankserver.dao.BankMapper;
 import com.esum.testbankserver.bankserver.dto.BankBook;
 import com.esum.testbankserver.bankserver.dto.BankUser;
+import com.esum.testbankserver.bankserver.module.JsonHandler;
 
 @RestController
 public class BnkSvrController {
 
 	@Autowired
-	private BankBookMapper mapper;
+	private BankMapper mapper;
 	
 	@GetMapping(path="/login")
-	public String LoginController(HttpServletRequest request, HttpServletResponse response) {
+	public boolean LoginController(HttpServletRequest request, HttpServletResponse response) {
+		BankUser bnkuser = new BankUser();
+		BankUser result = new BankUser();
+		Boolean user = true;
+		String DBHandler = request.getHeader("DBHandler");
+		String userinfo = request.getHeader("Find");
+		userinfo = userinfo.replaceAll("\\\\\"", "");
+
 		
-		return "로그인 페이지입니다 아직 아무것도 없음";
+		System.out.println(userinfo);
+		JsonHandler handler = new JsonHandler();
+		bnkuser = handler.parseBankUser(userinfo);
+		System.out.println(bnkuser.getBnk_user_id().replaceAll("\"", ""));
+		try {
+			result = mapper.selectOneUser(bnkuser.getBnk_user_id().replaceAll("\"", ""));
+			System.out.println(result.getBnk_user_id());
+			System.out.println(result.getBnk_user_pwd());
+			System.out.println(bnkuser.getBnk_user_pwd().replaceAll("\"", ""));
+			if(!"null".equals(result.getBnk_user_id())){
+				if(bnkuser.getBnk_user_pwd().replaceAll("\"", "").equals(result.getBnk_user_pwd())) {
+					System.out.println("맞았습니다.");
+					user = true;
+				}else {
+					System.out.println("틀렸습니다.");
+					user = false;
+				}
+			}
+		}catch(Exception e) {
+			System.out.println("없네용");
+			e.printStackTrace();
+		}
+//
+//		
+//		try {
+//			
+//		}catch(NullPointerException e) {
+//			
+//		}
+//		
+		return user;
+		
 	}
 	@GetMapping(path="/findBook")
 	public BankBook findBankbookController(HttpServletRequest request, HttpServletResponse response) {
