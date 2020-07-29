@@ -21,8 +21,8 @@ public class JsonHandler {
 		parser = new JsonParser();
 		element = parser.parse(jsonData);
 		
-		String loginid = element.getAsJsonObject().get("bnk_user_id").toString();
-		String loginpwd = element.getAsJsonObject().get("bnk_user_pwd").toString();
+		String loginid = element.getAsJsonObject().get("Bnk_user_id").getAsString();
+		String loginpwd = element.getAsJsonObject().get("Bnk_user_pwd").getAsString();
 		
 		bnkuser.setBnk_user_id(loginid);
 		bnkuser.setBnk_user_pwd(loginpwd);
