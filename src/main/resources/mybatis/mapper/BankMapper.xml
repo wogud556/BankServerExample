@@ -19,4 +19,8 @@
 	<select id="selectAllUser" resultType="BankUser">
 		SELECT * FROM BNK_USER
 	</select>
+	
+	<select id="finduserId" parameterType="string" resultType="int">
+		SELECT count(*) FROM BNK_USER WHERE BNK_USER_ID = #{bnk_user_id}
+	</select>
 </mapper>

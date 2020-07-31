@@ -17,5 +17,6 @@ public interface BankMapper {
 	
 	public BankUser selectOneUser(String bnk_user_id);
 	public List<BankUser> selectAllUser ();
+	public int finduserId(String bnk_user_id);
 	
 }

@@ -50,7 +50,6 @@ public class BnkSvrController {
 		
 		try {
 			System.out.println(bnkuser.getBnk_user_id() + " " + bnkuser.getBnk_user_pwd());
-			System.out.println(dbbnkuser.getBnk_user_id() + " " + dbbnkuser.getBnk_user_pwd());
 			if (bnkuser.getBnk_user_pwd().equals(dbbnkuser.getBnk_user_pwd())) {
 				return "true";
 			} else {
@@ -61,6 +60,43 @@ public class BnkSvrController {
 		}
 
 	}
+	
+	@PostMapping(path = "/findUserId")
+	public String findUserController(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		BankUser bnkuser = new BankUser();
+		int dbresult;
+		
+		String StreamData = null;
+		String result = null;
+		
+		request.setCharacterEncoding("UTF-8");
+		DataInputStream dis = new DataInputStream(request.getInputStream());
+		
+		StringBuffer resultData = new StringBuffer();
+		String str = null;
+		while ((str = dis.readLine()) != null) {
+			StreamData = new String(str.getBytes("ISO-8859-1"), "utf-8");
+			resultData.append(StreamData);
+		}
+		result = resultData.toString();
+		System.out.println(result);
+
+		JsonHandler parseJson = new JsonHandler();
+		bnkuser = parseJson.parseFindUser(result);
+		dbresult = mapper.finduserId(bnkuser.getBnk_user_id());
+		response.setCharacterEncoding("EUC-KR");
+		try {
+			System.out.println(bnkuser.getBnk_user_id() + " " + bnkuser.getBnk_user_pwd());
+			if (dbresult >= 1) {
+				return bnkuser.getBnk_user_id().toString();
+			} else {
+				return bnkuser.getBnk_user_id().toString();
+			}
+		} catch (NullPointerException e) {
+			return "none";
+		}
+	}
+	
 
 	@GetMapping(path = "/findBook")
 	public BankBook findBankbookController(HttpServletRequest request, HttpServletResponse response) {
@@ -83,17 +119,6 @@ public class BnkSvrController {
 		return list;
 	}
 
-	@GetMapping(path = "/findUser")
-	public BankUser findUserController(HttpServletRequest request, HttpServletResponse response) {
-
-		BankUser bnkuser = new BankUser();
-		String DBHandler = request.getHeader("DBHandler");
-		String bnk_user_uid = request.getHeader("UID");
-
-		bnkuser = mapper.selectOneUser(bnk_user_uid);
-
-		return bnkuser;
-	}
 
 	@GetMapping(path = "/findAllUser")
 	public List<BankUser> findAllBankUserController(HttpServletRequest request, HttpServletResponse response) {
