@@ -86,11 +86,14 @@ public class BnkSvrController {
 		dbresult = mapper.finduserId(bnkuser.getBnk_user_id());
 		response.setCharacterEncoding("EUC-KR");
 		try {
-			System.out.println(bnkuser.getBnk_user_id() + " " + bnkuser.getBnk_user_pwd());
+			System.out.println(dbresult);
 			if (dbresult >= 1) {
-				return bnkuser.getBnk_user_id().toString();
+				
+				return "true";
+				
 			} else {
-				return bnkuser.getBnk_user_id().toString();
+				return "false";
+				
 			}
 		} catch (NullPointerException e) {
 			return "none";
