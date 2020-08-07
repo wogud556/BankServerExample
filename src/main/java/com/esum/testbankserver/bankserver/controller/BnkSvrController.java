@@ -1,6 +1,9 @@
 package com.esum.testbankserver.bankserver.controller;
 
 import java.io.DataInputStream;
+import java.io.PrintStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -32,16 +35,8 @@ public class BnkSvrController {
 		String StreamData = null;
 		String result = null;
 		
-		request.setCharacterEncoding("UTF-8");
-		DataInputStream dis = new DataInputStream(request.getInputStream());
+		result = getHttpData(request);
 		
-		StringBuffer resultData = new StringBuffer();
-		String str = null;
-		while ((str = dis.readLine()) != null) {
-			StreamData = new String(str.getBytes("ISO-8859-1"), "utf-8");
-			resultData.append(StreamData);
-		}
-		result = resultData.toString();
 		System.out.println(result);
 
 		JsonHandler parseJson = new JsonHandler();
@@ -69,16 +64,8 @@ public class BnkSvrController {
 		String StreamData = null;
 		String result = null;
 		
-		request.setCharacterEncoding("UTF-8");
-		DataInputStream dis = new DataInputStream(request.getInputStream());
+		result = getHttpData(request);
 		
-		StringBuffer resultData = new StringBuffer();
-		String str = null;
-		while ((str = dis.readLine()) != null) {
-			StreamData = new String(str.getBytes("ISO-8859-1"), "utf-8");
-			resultData.append(StreamData);
-		}
-		result = resultData.toString();
 		System.out.println(result);
 
 		JsonHandler parseJson = new JsonHandler();
@@ -100,35 +87,57 @@ public class BnkSvrController {
 		}
 	}
 	
-
-	@GetMapping(path = "/findBook")
-	public BankBook findBankbookController(HttpServletRequest request, HttpServletResponse response) {
-		BankBook bnkbook = new BankBook();
-		String DBHandler = request.getHeader("DBHandler");
-
-		if ("Select".equals(DBHandler)) {
-			bnkbook = mapper.selectOneBankBook("101-11-232-12314");
-
+	@PostMapping(path = "/userinsert")
+	public void insertUserController(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		BankUser bnkuser = new BankUser();
+		Date date = new Date();
+		
+		SimpleDateFormat nowDate = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		String Now = nowDate.format(date);
+		System.out.println(Now);
+		
+		int dbresult;
+		
+		String StreamData = null;
+		String result = null;
+		
+		result = getHttpData(request);
+		
+		System.out.println(result);
+		
+		JsonHandler parseJson = new JsonHandler();
+		bnkuser = parseJson.parseInsertUser(result);
+		bnkuser.setBnk_user_uid("A12345");
+		bnkuser.setBnk_user_account_count("0");
+		bnkuser.setBnk_user_last_update(Now);
+		bnkuser.setBnk_user_level("M");
+		
+		response.setCharacterEncoding("EUC-KR");
+		try {
+			mapper.userInsert(bnkuser);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-
-		return bnkbook;
 	}
 
-	@GetMapping(path = "/findAllBook")
-	public List<BankBook> findAllBankbookController(HttpServletRequest request, HttpServletResponse response) {
-		List<BankBook> list = mapper.selectAllBankBook();
-		String DBHandler = request.getHeader("DBHandler");
-
-		return list;
+	
+	public String getHttpData(HttpServletRequest request) throws Exception{
+		String StreamData = null;
+		String result = null;
+		
+		request.setCharacterEncoding("UTF-8");
+		DataInputStream dis = new DataInputStream(request.getInputStream()) ;
+		
+		StringBuffer resultData = new StringBuffer();
+		String str = null;
+		while ((str = dis.readLine()) != null) {
+			StreamData = new String(str.getBytes("ISO-8859-1"), "utf-8");
+			resultData.append(StreamData);
+		}
+		result = resultData.toString();
+		System.out.println(result);
+		
+		return result;
 	}
-
-
-	@GetMapping(path = "/findAllUser")
-	public List<BankUser> findAllBankUserController(HttpServletRequest request, HttpServletResponse response) {
-		List<BankUser> list = mapper.selectAllUser();
-		String DBHandler = request.getHeader("DBHandler");
-
-		return list;
-	}
-
 }

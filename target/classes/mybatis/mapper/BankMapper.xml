@@ -23,4 +23,8 @@
 	<select id="finduserId" parameterType="string" resultType="int">
 		SELECT count(*) FROM BNK_USER WHERE BNK_USER_ID = #{bnk_user_id}
 	</select>
+	
+	<insert id ="userInsert" parameterType="BankUser">
+		INSERT INTO BNK_USER VALUES(#{BankUser.getBnk_user_uid}, #{BankUser.getBnk_user_id}, #{BankUser.getbnk_user_pwd}, #{BankUser.getBnk_user_name}. #{BankUser.getBnk_user_account_count}, #{BankUser.getBnK_user_last_update_time}, #{bnk_user_level})
+	</insert>
 </mapper>
