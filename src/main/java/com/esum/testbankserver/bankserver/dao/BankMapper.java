@@ -1,5 +1,6 @@
 package com.esum.testbankserver.bankserver.dao;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -18,6 +19,6 @@ public interface BankMapper {
 	public BankUser selectOneUser(String bnk_user_id);
 	public List<BankUser> selectAllUser ();
 	public int finduserId(String bnk_user_id);
-	public void userInsert(BankUser bnkuser);
+	public void userInsert(HashMap<String, Object> map);
 	
 }

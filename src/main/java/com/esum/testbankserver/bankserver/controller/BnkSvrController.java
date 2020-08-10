@@ -4,6 +4,7 @@ import java.io.DataInputStream;
 import java.io.PrintStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -91,8 +92,8 @@ public class BnkSvrController {
 	public void insertUserController(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		BankUser bnkuser = new BankUser();
 		Date date = new Date();
-		
-		SimpleDateFormat nowDate = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		SimpleDateFormat nowDate = new SimpleDateFormat("yyyyMMddhhmmss");
 		String Now = nowDate.format(date);
 		System.out.println(Now);
 		
@@ -107,18 +108,35 @@ public class BnkSvrController {
 		
 		JsonHandler parseJson = new JsonHandler();
 		bnkuser = parseJson.parseInsertUser(result);
-		bnkuser.setBnk_user_uid("A12345");
+		System.out.println(bnkuser.getBnk_user_id());
+		
+		bnkuser.setBnk_user_uid("A11346");
 		bnkuser.setBnk_user_account_count("0");
 		bnkuser.setBnk_user_last_update(Now);
 		bnkuser.setBnk_user_level("M");
 		
+		System.out.println(Now);
+		
+		
+		map.put("useruid", bnkuser.getBnk_user_uid());
+		map.put("userid", bnkuser.getBnk_user_id());
+		map.put("userpwd", bnkuser.getBnk_user_pwd());
+		map.put("username", bnkuser.getBnk_user_name());
+		map.put("accountcnt", bnkuser.getBnk_user_account_count());
+		map.put("updatetime", bnkuser.getBnk_user_last_update());
+		map.put("level", bnkuser.getBnk_user_level());
+		
 		response.setCharacterEncoding("EUC-KR");
 		try {
-			mapper.userInsert(bnkuser);
+			mapper.userInsert(map);
+			response.setHeader("result","ok");
 			
 		} catch (Exception e) {
+			response.setHeader("result", "no");
 			e.printStackTrace();
 		}
+		
+
 	}
 
 	

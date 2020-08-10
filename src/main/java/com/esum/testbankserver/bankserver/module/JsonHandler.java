@@ -52,9 +52,11 @@ public class JsonHandler {
 		String userpwd = element.getAsJsonObject().get("Bnk_user_pwd").getAsString();
 		String username = element.getAsJsonObject().get("Bnk_user_name").getAsString();
 		
-		bnkuser.setBnk_user_name(userid);
+		bnkuser.setBnk_user_id(userid);
 		bnkuser.setBnk_user_pwd(userpwd);
 		bnkuser.setBnk_user_name(username);
+		
+		System.out.println(userid + userpwd + username);
 		
 		return bnkuser;
 	}
