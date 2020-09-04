@@ -1,48 +1,43 @@
 package com.esum.testbankserver.bankserver.controller;
 
 import java.io.DataInputStream;
-import java.io.PrintStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.esum.testbankserver.bankserver.dao.BankMapper;
-import com.esum.testbankserver.bankserver.dto.BankBook;
+import com.esum.testbankserver.bankserver.dto.BankUID;
 import com.esum.testbankserver.bankserver.dto.BankUser;
 import com.esum.testbankserver.bankserver.module.JsonHandler;
+import com.esum.testbankserver.bankserver.service.BanksvrService;
 
 @RestController
 @RequestMapping(path = "/")
 public class BnkSvrController {
 
-	@Autowired
-	private BankMapper mapper;
+	private BanksvrService service;
 
 	@PostMapping(value = "/login")
 	public String LoginController(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		BankUser bnkuser = new BankUser();
 		BankUser dbbnkuser = new BankUser();
-		
+		service = new BanksvrService();
 		String StreamData = null;
 		String result = null;
 		
 		result = getHttpData(request);
 		
 		System.out.println(result);
-
+		
 		JsonHandler parseJson = new JsonHandler();
 		bnkuser = parseJson.parseBankUser(result);
-		dbbnkuser = mapper.selectOneUser(bnkuser.getBnk_user_id());
+		dbbnkuser = service.selectOneUser(bnkuser.getBnk_user_id());
 		
 		try {
 			System.out.println(bnkuser.getBnk_user_id() + " " + bnkuser.getBnk_user_pwd());
@@ -71,7 +66,7 @@ public class BnkSvrController {
 
 		JsonHandler parseJson = new JsonHandler();
 		bnkuser = parseJson.parseFindUser(result);
-		dbresult = mapper.finduserId(bnkuser.getBnk_user_id());
+		dbresult = service.findUserId(bnkuser.getBnk_user_id());
 		response.setCharacterEncoding("EUC-KR");
 		try {
 			System.out.println(dbresult);
@@ -128,7 +123,7 @@ public class BnkSvrController {
 		
 		response.setCharacterEncoding("EUC-KR");
 		try {
-			mapper.userInsert(map);
+			service.userInsert(map);
 			response.setHeader("result","ok");
 			
 		} catch (Exception e) {
@@ -157,5 +152,27 @@ public class BnkSvrController {
 		System.out.println(result);
 		
 		return result;
+	}
+	
+	public BankUID getUserUid() {
+		String uid_char = "";
+		int uid_num = 0;
+		BankUID getbankUID, setbankUID;
+		getbankUID = new BankUID();
+		setbankUID = new BankUID();
+		
+		try {
+			getbankUID = service.getUserUID();
+			if("null".equals(getbankUID.getUID_CHAR().toString())) {
+				//mapper.mergeUID(); 먼저 merge문으로 초기값을 넣는다.
+				//service.insertUserUID(map);
+				
+			}else {
+				
+			}
+		}catch(NullPointerException e){
+			e.printStackTrace();
+		}
+		return setbankUID;
 	}
 }

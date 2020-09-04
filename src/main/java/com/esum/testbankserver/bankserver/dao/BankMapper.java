@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.esum.testbankserver.bankserver.dto.BankBook;
+import com.esum.testbankserver.bankserver.dto.BankUID;
 import com.esum.testbankserver.bankserver.dto.BankUser;
 
 /*
@@ -20,5 +21,10 @@ public interface BankMapper {
 	public List<BankUser> selectAllUser ();
 	public int finduserId(String bnk_user_id);
 	public void userInsert(HashMap<String, Object> map);
+	public BankUID getUID();
+	public void InsertMergeUID(HashMap<String, Object> map );
+	public List<BankUser> showBankUser();
+	public List<BankBook> showBankBook();
+	public void insertChit(HashMap<String, Object> map);
 	
 }

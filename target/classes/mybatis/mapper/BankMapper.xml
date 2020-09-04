@@ -27,4 +27,7 @@
 	<insert id ="userInsert" parameterType="map">
 		INSERT INTO BNK_USER VALUES(#{useruid}, #{userid}, #{userpwd}, #{username}, #{accountcnt}, TO_DATE(#{updatetime},'YYYYMMDDHH24MISS'), #{level})
 	</insert>
+	<select id="getUID" resultType="BankUID">
+		SELECT * FROM BNK_MAKE_UID_TABLE
+	</select>
 </mapper>
